@@ -1,0 +1,170 @@
+﻿@model IEnumerable<Packag>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container py-5">
+    <!-- العنوان وأزرار التحكم -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="fw-bold text-primary">
+            <i class="fas fa-boxes me-2"></i>
+            إدارة الباقات
+        </h2>
+        <a asp-action="CreatePackag" class="btn btn-primary btn-lg rounded-pill">
+            <i class="fas fa-plus-circle me-2"></i>
+            إضافة باقة جديدة
+        </a>
+    </div>
+
+    <!-- بطاقات الباقات -->
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="package-card card h-100 shadow-lg border-0 overflow-hidden">
+                    <div class="card-image position-relative" style="height: 300px;">
+                        <img src="/images/@item.image"
+                             alt="@item.Name"
+                             class="img-fluid h-100 w-100"
+                             style="object-fit: cover;"
+                             loading="lazy">
+                        <div class="image-overlay"></div>
+                        <span class="package-id">#@item.Id</span>
+                    </div>
+             
+                    <!-- محتوى البطاقة -->
+                    <div class="card-body p-4">
+                        <h3 class="card-title fw-bold mb-3">@item.Name</h3>
+
+                        
+
+                        <!-- أزرار التحكم -->
+                        <div class="d-flex justify-content-between gap-2">
+                            <a asp-action="EditPackag"
+                               asp-route-id="@item.Id"
+                               class="btn btn-warning btn-sm flex-grow-1 rounded-pill">
+                                <i class="fas fa-edit me-2"></i>
+                                تعديل
+                            </a>
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm flex-grow-1 rounded-pill"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal-@item.Id">
+                                <i class="fas fa-trash-alt me-2"></i>
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal التأكيد على الحذف -->
+            <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">تأكيد الحذف</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>هل أنت متأكد من رغبتك في حذف الباقة "@item.Name"؟</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form asp-action="Delted_Packag" method="post">
+                                <input type="hidden" name="Id" value="@item.Id" />
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                                <button type="submit" class="btn btn-danger">حذف</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e67e22;
+    }
+
+    .package-card {
+        transition: all 0.3s ease;
+        border-radius: 1rem;
+    }
+
+        .package-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+    .card-image {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .package-card:hover .card-image {
+        transform: scale(1.05);
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+    }
+
+    .package-id {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        border: none;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+        border: none;
+        color: white;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        border: none;
+    }
+
+    .info-item a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .info-item a:hover {
+            color: var(--secondary-color);
+        }
+
+    @@media (max-width: 768px) {
+        .card-image {
+            height: 150px;
+        }
+
+        .btn-lg {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>

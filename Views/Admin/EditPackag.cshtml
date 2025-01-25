@@ -1,0 +1,26 @@
+﻿@model Packag
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container">
+    <h2> تعديل باقه </h2>
+    <form asp-action="update_Packag" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label>اسم :</label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label> الرابط:</label>
+            <input type="hidden" asp-for="Url" value="EventPage" class="form-control" required />
+        </div>
+      
+        <div class="form-group">
+            <label>الصوره:</label>
+            <input type="file" name="photo" class="form-control" required />
+
+        </div>
+        <button type="submit" class="btn btn-success">إضافة</button>
+    </form>
+</div>

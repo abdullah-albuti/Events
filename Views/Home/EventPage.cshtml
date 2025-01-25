@@ -1,0 +1,193 @@
+﻿@model IEnumerable<Event>
+@{
+    var items = ViewBag.FilteredItemss;
+}
+
+<div class="container py-5">
+    <!-- عنوان الصفحة -->
+    <div class="row mb-5">
+        <div class="col-12">
+            @if (items != null)
+            {
+                <h1 class="display-5 fw-bold text-primary mb-3 border-bottom pb-3">
+                    <i class="fas fa-ticket-alt me-2"></i>
+                    الفعاليات المتاحة في باقة @items.Name
+                </h1>
+            }
+            else
+            {
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="display-5 fw-bold text-primary">
+                        <i class="fas fa-calendar-alt me-2"></i>
+                        جميع الفعاليات
+                    </h1>
+
+                    <!-- نموذج البحث -->
+                    <form asp-action="EventPageAll" method="get" class="search-box">
+                        <div class="input-group">
+                            <input type="text"
+                                   name="searchString"
+                                   class="form-control rounded-pill"
+                                   placeholder="ابحث عن فعالية..."
+                                   value="@Context.Request.Query["searchString"]">
+                            <button type="submit" class="btn btn-primary rounded-pill">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- بطاقات الفعاليات -->
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="event-card card h-100 shadow-lg border-0 overflow-hidden">
+                    <!-- صورة الفعالية -->
+                    <div class="card-image position-relative">
+                        <img src="/images/@item.image"
+                             alt="@item.Name"
+                             class="img-fluid"
+                             loading="lazy">
+                        <div class="image-overlay"></div>
+                        <span class="event-date badge bg-primary">
+                            @item.Date.ToString("dd MMM")
+                        </span>
+                    </div>
+
+                    <!-- محتوى البطاقة -->
+                    <div class="card-body p-4">
+                        <h3 class="card-title fw-bold mb-3">@item.Name</h3>
+
+                        <div class="event-details mb-4">
+                            <div class="detail-item d-flex align-items-center mb-2">
+                                <i class="fas fa-map-marker-alt text-secondary me-2"></i>
+                                <span>@item.Location</span>
+                            </div>
+                            <div class="detail-item d-flex align-items-center">
+                                <i class="fas fa-tag text-success me-2"></i>
+                                <span>@item.Price.ToString("C")</span>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <a asp-action="BookEvent"
+                               asp-route-id="@item.EventId"
+                               class="btn btn-primary btn-lg rounded-pill">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                احجز الآن
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e67e22;
+    }
+
+    /* بطاقات الفعاليات */
+    .event-card {
+        transition: all 0.3s ease;
+        border-radius: 1rem;
+    }
+
+        .event-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+    /* تصميم الصورة */
+    .card-image {
+        height: 250px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .event-card:hover .card-image {
+        transform: scale(1.05);
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+    }
+
+    /* تاريخ الفعالية */
+    .event-date {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        font-size: 1.1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 30px;
+    }
+
+    /* تفاصيل الفعالية */
+    .event-details {
+        border-top: 2px solid #f0f0f0;
+        padding-top: 1rem;
+    }
+
+    /* زر الحجز */
+    .btn-primary {
+        background: var(--secondary-color);
+        border: none;
+        padding: 1rem 2rem;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+    /* مربع البحث */
+    .search-box {
+        max-width: 400px;
+    }
+
+        .search-box .form-control {
+            border: 2px solid var(--primary-color);
+            padding: 0.75rem 1.5rem;
+        }
+
+        .search-box .btn {
+            margin-left: -50px;
+            padding: 0.75rem 1.5rem;
+        }
+
+    /* التجاوب مع الشاشات الصغيرة */
+    @@media (max-width: 768px) {
+        .card-image {
+            height: 200px;
+        }
+
+        .event-date {
+            font-size: 0.9rem;
+            bottom: 10px;
+            left: 10px;
+        }
+
+        .search-box {
+            width: 100%;
+            margin-top: 1rem;
+        }
+    }
+</style>
+
+<!-- رابط أيقونات Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">

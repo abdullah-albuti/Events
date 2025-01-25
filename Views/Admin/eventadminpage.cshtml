@@ -1,0 +1,184 @@
+﻿@model IEnumerable<Event>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container py-5">
+    <!-- العنوان وأزرار التحكم -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="fw-bold text-primary">
+            <i class="fas fa-calendar-days me-2"></i>
+            إدارة الفعاليات
+        </h2>
+        <a asp-action="CreateEvent" class="btn btn-primary btn-lg rounded-pill">
+            <i class="fas fa-plus-circle me-2"></i>
+            إضافة فعالية
+        </a>
+    </div>
+
+    <!-- بطاقات الفعاليات -->
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="event-card card h-100 shadow-lg border-0 overflow-hidden">
+                    <!-- صورة الفعالية -->
+                    <div class="card-image position-relative">
+                        <img src="/images/@item.image"
+                             alt="@item.Name"
+                             class="img-fluid"
+                             loading="lazy">
+                        <div class="image-overlay"></div>
+                        <span class="event-id">#@item.EventId</span>
+                    </div>
+
+                    <!-- محتوى البطاقة -->
+                    <div class="card-body p-4">
+                        <h3 class="card-title fw-bold mb-3">@item.Name</h3>
+
+                        <!-- معلومات الفعالية -->
+                        <div class="event-details mb-4">
+                            <div class="detail-item d-flex align-items-center mb-2">
+                                <i class="fas fa-map-marker-alt text-secondary me-2"></i>
+                                <span>@item.Location</span>
+                            </div>
+                            <div class="detail-item d-flex align-items-center mb-2">
+                                <i class="fas fa-calendar-day text-info me-2"></i>
+                                <span>@item.Date.ToString("yyyy-MM-dd")</span>
+                            </div>
+                            <div class="detail-item d-flex align-items-center mb-2">
+                                <i class="fas fa-tag text-success me-2"></i>
+                                <span>@item.Price.ToString("N0") ر.س</span>
+                            </div>
+                            <div class="detail-item d-flex align-items-center">
+                                <i class="fas fa-box-open text-warning me-2"></i>
+                                <span>الباقة #@item.PackagId</span>
+                            </div>
+                        </div>
+
+                        <!-- أزرار التحكم -->
+                        <div class="d-flex justify-content-between gap-2">
+                            <a asp-action="EditEvent"
+                               asp-route-id="@item.EventId"
+                               class="btn btn-warning btn-sm flex-grow-1 rounded-pill">
+                                <i class="fas fa-edit me-2"></i>
+                                تعديل
+                            </a>
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm flex-grow-1 rounded-pill"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal-@item.EventId">
+                                <i class="fas fa-trash-alt me-2"></i>
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal التأكيد على الحذف -->
+            <div class="modal fade" id="deleteModal-@item.EventId" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">تأكيد الحذف</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>هل أنت متأكد من رغبتك في حذف الفعالية "@item.Name"؟</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form asp-action="Delted_Events" method="post">
+                                <input type="hidden" name="EventId" value="@item.EventId" />
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                                <button type="submit" class="btn btn-danger">حذف</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e67e22;
+    }
+
+    .event-card {
+        transition: all 0.3s ease;
+        border-radius: 1rem;
+    }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+    .card-image {
+        height: 200px;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .event-card:hover .card-image {
+        transform: scale(1.05);
+    }
+
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+    }
+
+    .event-id {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        padding: 0.3rem 1rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        border: none;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+        border: none;
+        color: white;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        border: none;
+    }
+
+    .event-details {
+        border-top: 2px solid #f0f0f0;
+        padding-top: 1rem;
+        margin-top: 1rem;
+    }
+
+    @@media (max-width: 768px) {
+        .card-image {
+            height: 150px;
+        }
+
+        .btn-lg {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>

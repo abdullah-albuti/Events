@@ -1,0 +1,203 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "تسجيل الدخول";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <!-- الشعار -->
+        <div class="text-center mb-5">
+            <img src="/images/logo.png" height="80" alt="الشعار" class="auth-logo">
+        </div>
+
+        <!-- العنوان الرئيسي -->
+        <h1 class="auth-title">مرحبًا بعودتك!</h1>
+
+        <!-- نموذج تسجيل الدخول -->
+        <form id="account" method="post" class="auth-form">
+            <!-- رسائل التحقق -->
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <!-- حقل الإيميل -->
+            <div class="form-group icon-input">
+                <i class="fas fa-envelope input-icon"></i>
+                <input asp-for="Input.Email"
+                       class="form-control"
+                       placeholder="البريد الإلكتروني"
+                       autocomplete="username">
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <!-- حقل كلمة المرور -->
+            <div class="form-group icon-input">
+                <i class="fas fa-lock input-icon"></i>
+                <input asp-for="Input.Password"
+                       class="form-control"
+                       placeholder="كلمة المرور"
+                       autocomplete="current-password">
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <!-- خيار تذكرني -->
+            <div class="form-group remember-me">
+                <label class="checkbox-label">
+                    <input asp-for="Input.RememberMe" class="checkbox-input">
+                    <span class="checkmark"></span>
+                    تذكرني
+                </label>
+            </div>
+
+            <!-- زر تسجيل الدخول -->
+            <button type="submit" class="btn auth-btn">
+                تسجيل الدخول
+                <i class="fas fa-arrow-left ms-2"></i>
+            </button>
+
+            <!-- الروابط الإضافية -->
+            <div class="auth-links">
+                <a asp-page="./ForgotPassword" class="link">نسيت كلمة المرور؟</a>
+                <a asp-page="./Register" class="link">إنشاء حساب جديد</a>
+                <a asp-page="./ResendEmailConfirmation" class="link">إعادة إرسال التأكيد</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* التنسيقات العامة */
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e67e22;
+    }
+
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+    }
+
+    .auth-card {
+        background: white;
+        padding: 2.5rem;
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .auth-title {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    /* حقول الإدخال */
+    .icon-input {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .input-icon {
+        position: absolute;
+        top: 50%;
+        right: 1rem;
+        transform: translateY(-50%);
+        color: #666;
+    }
+
+    .form-control {
+        padding-right: 2.5rem !important;
+        border-radius: 0.5rem;
+        border: 2px solid #eee;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+    /* زر تسجيل الدخول */
+    .auth-btn {
+        background: var(--secondary-color);
+        color: white;
+        width: 100%;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+    /* الروابط */
+    .auth-links {
+        margin-top: 1.5rem;
+        text-align: center;
+    }
+
+    .link {
+        display: block;
+        color: #666;
+        margin: 0.5rem 0;
+        transition: color 0.3s ease;
+    }
+
+        .link:hover {
+            color: var(--primary-color);
+        }
+
+    /* خيار تذكرني المخصص */
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .checkbox-input {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .checkmark {
+        width: 18px;
+        height: 18px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        margin-left: 0.5rem;
+        position: relative;
+    }
+
+    .checkbox-input:checked ~ .checkmark {
+        background: var(--secondary-color);
+        border-color: var(--secondary-color);
+    }
+
+    .checkmark:after {
+        content: "✓";
+        position: absolute;
+        color: white;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        display: none;
+    }
+
+    .checkbox-input:checked ~ .checkmark:after {
+        display: block;
+    }
+</style>
+   
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

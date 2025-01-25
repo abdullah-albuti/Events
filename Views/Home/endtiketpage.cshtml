@@ -1,0 +1,259 @@
+﻿@model Booking
+@{
+    var items = ViewBag.PackageToBookEvent;
+}
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #27ae60;
+    }
+
+    .success-container {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .success-alert {
+        background: rgba(39, 174, 96, 0.1);
+        border: 2px solid var(--accent-color);
+        border-radius: 1.5rem;
+        padding: 2.5rem;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .success-alert:before {
+            content: "\f058";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: -30px;
+            right: -30px;
+            font-size: 8rem;
+            color: rgba(39, 174, 96, 0.1);
+            z-index: 0;
+        }
+
+    .invoice-container {
+        background: white;
+        border-radius: 1.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.3s ease;
+    }
+
+        .invoice-container:hover {
+            transform: translateY(-5px);
+        }
+
+    .invoice-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+    }
+
+    .invoice-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: var(--accent-color);
+        color: white;
+        padding: 0.5rem 1.5rem;
+        border-radius: 30px;
+        font-size: 0.9rem;
+    }
+
+    .client-info {
+        padding: 2rem;
+        background: #f8f9fa;
+        border-radius: 1rem;
+        margin: 2rem;
+    }
+
+    .invoice-table {
+        padding: 0 2rem 2rem;
+    }
+
+    .table-responsive {
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    }
+
+    .table thead {
+        background: var(--primary-color);
+        color: white;
+    }
+
+    .table th {
+        border: none !important;
+        padding: 1.2rem !important;
+    }
+
+    .table td {
+        vertical-align: middle;
+        padding: 1.2rem !important;
+        border-color: #f0f0f0 !important;
+    }
+
+    .total-box {
+        background: var(--accent-color);
+        color: white;
+        padding: 1.5rem;
+        margin: 2rem;
+        border-radius: 1rem;
+        font-size: 1.5rem;
+    }
+
+    .btn-print {
+        background: var(--primary-color);
+        border: none;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin: 2rem auto;
+    }
+
+        .btn-print:hover {
+            transform: scale(1.05);
+            background: var(--secondary-color);
+        }
+
+    @@media (max-width: 768px) {
+        .success-alert {
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+
+        .client-info,
+        .invoice-table {
+            margin: 1rem;
+            padding: 1rem;
+        }
+
+        .table th,
+        .table td {
+            padding: 0.8rem !important;
+        }
+    }
+</style>
+
+<div class="success-container">
+    <div class="container">
+        <!-- رسالة النجاح -->
+        <div class="success-alert">
+            <div class="position-relative" style="z-index: 1">
+                <h1 class="display-5 fw-bold mb-3 text-success">
+                    تم الحجز بنجاح!
+                </h1>
+                <p class="lead mb-0">
+                    شكراً لثقتك بنا، تم استلام طلبك بنجاح<br>
+                    سيتم التواصل معك خلال 24 ساعة لتأكيد التفاصيل
+                </p>
+            </div>
+        </div>
+
+        <!-- فاتورة المشتريات -->
+        <div class="invoice-container">
+            <div class="invoice-badge">
+                <i class="fas fa-receipt me-2"></i>
+                فاتورة رسمية
+            </div>
+
+            <!-- رأس الفاتورة -->
+            <div class="invoice-header">
+                <h2 class="display-6 fw-bold mb-3">فاتورة مشتريات</h2>
+                <div class="d-flex justify-content-center gap-4">
+                    <p class="mb-0">
+                        <i class="fas fa-hashtag me-2"></i>
+                        #@Model.BookingId
+                    </p>
+                    <p class="mb-0">
+                        <i class="fas fa-calendar-day me-2"></i>
+                        @DateTime.Now.ToString("yyyy-MM-dd")
+                    </p>
+                </div>
+            </div>
+
+            <!-- معلومات العميل -->
+            <div class="client-info">
+                <h4 class="fw-bold mb-4">
+                    <i class="fas fa-user-circle me-2"></i>
+                    معلومات العميل
+                </h4>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <p class="mb-1 text-secondary">الاسم الكامل</p>
+                        <p class="fw-bold">@Model.CustomerName</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <p class="mb-1 text-secondary">البريد الإلكتروني</p>
+                        <p class="fw-bold">@Model.CustomerEmail</p>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <p class="mb-1 text-secondary">رقم الجوال</p>
+                        <p class="fw-bold">@Model.CustomerPhone</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- تفاصيل الطلب -->
+            <div class="invoice-table">
+                <h4 class="fw-bold mb-4">
+                    <i class="fas fa-list-alt me-2"></i>
+                    تفاصيل الطلب
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>الفعالية</th>
+                                <th>الموقع</th>
+                                <th>التاريخ</th>
+                                <th>القيمة</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@items.EventId</td>
+                                <td>@items.Name</td>
+                                <td>@items.Location</td>
+                                <td>@items.Date.ToString("yyyy-MM-dd")</td>
+                                <td>@items.Price.ToString("N0") ر.س</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- المجموع النهائي -->
+            <div class="total-box text-center">
+                <span class="me-2">المجموع النهائي:</span>
+                <strong>@items.Price.ToString("N0") ر.س</strong>
+            </div>
+
+            <!-- زر الطباعة -->
+            <div class="text-center">
+                <button class="btn btn-print" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                    طباعة الفاتورة
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- الروابط الخارجية -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

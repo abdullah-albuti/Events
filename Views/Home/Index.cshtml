@@ -1,0 +1,192 @@
+﻿@model IEnumerable<Packag>
+
+<div class="container my-5">
+    <!-- العنوان الرئيسي مع تصميم مميز -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-4 fw-bold gradient-text mb-4">استكشف باقاتنا السياحية</h1>
+            <div class="header-divider"></div>
+        </div>
+    </div>
+
+    <!-- وصف الباقات -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-8">
+            <div class="intro-box p-4 shadow-lg rounded-4">
+                <p class="lead text-center mb-0">
+                    اكتشف روعة المملكة العربية السعودية وتعرّف على الكنوز الخفية داخلها.
+                    من جبال أبها الشامخة إلى متاحف جدة المميزة، نقدم لك تجارب لا تُنسى
+                    مع أفضل العروض والحزم المتكاملة.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- بطاقات الباقات -->
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <a asp-action="EventPage" asp-route-id="@item.Id" class="card-link">
+                    <div class="package-card h-100 shadow-lg rounded-4 overflow-hidden">
+                        <!-- الصورة مع تأثيرات hover -->
+                        <div class="card-image-container">
+                            <img src="/images/@item.image"
+                                 alt="@item.Name"
+                                 class="card-image"
+                                 loading="lazy">
+                            <div class="image-overlay"></div>
+                        </div>
+
+                        <!-- محتوى البطاقة -->
+                        <div class="card-content p-4">
+                            <h3 class="card-title fw-bold mb-3">@item.Name</h3>
+
+
+
+                            <!-- زر التفاصيل -->
+                            <div class="text-center mt-4">
+                                <span class="btn btn-primary rounded-pill px-4">
+                                    عرض التفاصيل
+                                    <i class="fas fa-arrow-left ms-2"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --gradient: linear-gradient(45deg, #2c3e50, #3498db);
+    }
+
+    /* تصميم العنوان */
+    .gradient-text {
+        background: var(--gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .header-divider {
+        width: 120px;
+        height: 4px;
+        background: var(--gradient);
+        margin: 1.5rem auto;
+        border-radius: 2px;
+    }
+
+    /* مربع الوصف */
+    .intro-box {
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid var(--primary-color);
+        backdrop-filter: blur(5px);
+        line-height: 1.8;
+    }
+
+    /* بطاقات الباقات */
+    .package-card {
+        transition: all 0.3s ease;
+        background: #ffffff;
+        position: relative;
+    }
+
+        .package-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+    /* حاوية الصورة */
+    .card-image-container {
+        position: relative;
+        overflow: hidden;
+        height: 250px;
+    }
+
+    .card-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .package-card:hover .card-image {
+        transform: scale(1.05);
+    }
+
+    /* طبقة التعتيم على الصورة */
+    .image-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 100%);
+    }
+
+    /* محتوى البطاقة */
+    .card-content {
+        position: relative;
+        z-index: 1;
+    }
+
+    .card-title {
+        color: var(--primary-color);
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .card-details {
+        border-top: 1px solid #eee;
+        padding-top: 1rem;
+        margin-top: 1rem;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+
+    .btn-primary {
+        background: var(--gradient);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+    /* التأثيرات على الروابط */
+    .card-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+        .card-link:hover .card-title {
+            color: var(--secondary-color);
+        }
+
+    /* التجاوب مع الشاشات الصغيرة */
+    @@media (max-width: 768px) {
+        .card-image-container {
+            height: 200px;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+        }
+    }
+</style>

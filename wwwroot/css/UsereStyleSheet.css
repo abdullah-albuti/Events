@@ -1,0 +1,138 @@
+﻿:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --gradient: linear-gradient(45deg, #3498db, #2c3e50);
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0; /* إضافة margin صفر لتجنب الفراغات غير المرغوب فيها */
+}
+
+.navbar {
+    background: var(--gradient);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    padding: 0.5rem 1rem;
+    position: relative; /* لضمان تموضع صحيح للعناصر الفرعية */
+}
+
+.navbar-brand {
+    color: white !important;
+    font-weight: 700;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* إضافة مسافة بين العناصر */
+}
+
+.nav-link {
+    color: rgba(255,255,255,0.8) !important;
+    margin: 0 0.8rem;
+    transition: all 0.3s ease;
+    position: relative;
+    padding: 0.5rem 0; /* تحسين المساحة الداخلية */
+}
+
+    .nav-link:hover,
+    .nav-link.active {
+        color: white !important;
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        right: 0;
+        width: 0;
+        height: 2px;
+        background: white;
+        transition: width 0.3s;
+        left: 0; /* تعديل للتوافق مع RTL */
+        right: auto; /* إصلاح للاتجاه العربي */
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+.main-content {
+    flex: 1;
+    background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+    padding: 2rem 0;
+    min-height: calc(100vh - 120px); /* منع القطع في المحتوى القصير */
+}
+
+.footer {
+    background: var(--gradient);
+    color: white;
+    margin-top: auto;
+    padding: 1.5rem; /* إضافة مساحة داخلية */
+    text-align: center;
+}
+
+    .footer a {
+        color: rgba(255,255,255,0.8);
+        text-decoration: none;
+        transition: color 0.3s ease;
+        margin: 0 0.5rem; /* تحسين المسافات بين الروابط */
+    }
+
+        .footer a:hover {
+            color: white;
+        }
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* استبدال margin-left بgap للتحكم المسافات */
+    margin-top: 1rem;
+}
+
+.scroll-top {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--secondary-color);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000; /* التأكد من ظهوره فوق العناصر الأخرى */
+}
+
+    .scroll-top.show {
+        opacity: 1;
+    }
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+
+    .nav-link {
+        margin: 0 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .main-content {
+        padding: 1rem 0;
+    }
+
+    .scroll-top {
+        bottom: 10px;
+        left: 10px;
+        width: 35px;
+        height: 35px;
+    }
+}

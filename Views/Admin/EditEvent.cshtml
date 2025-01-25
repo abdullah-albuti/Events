@@ -1,0 +1,87 @@
+﻿@model Event
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@{
+
+    var PackageToEvents = ViewBag.PackageToEvents;
+}
+
+@if (Model != null)
+{ 
+
+<div class="container">
+    <h2>إضافة فعالية جديدة</h2>
+        <form asp-action="update_Events" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="EventId" />
+
+        <div class="form-group">
+            <label>اسم الفعالية:</label>
+            <input asp-for="Name" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label>تاريخ الفعالية:</label>
+            <input asp-for="Date" type="date" class="form-control" required />
+        </div>
+            <div class="form-group">
+                <label>باقة الفعالية:</label>
+                <select class="form-control" name="PackagId" required>
+                    @if (PackageToEvents != null)
+                    {
+                        foreach (var item in PackageToEvents)
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    }
+                    else
+                    {
+                        <option value="">لا توجد باقات متاحة</option>
+                    }
+                </select>
+            </div>
+
+
+
+        <div class="form-group">
+            <label>الموقع:</label>
+            <input asp-for="Location" class="form-control" required />
+        </div>
+
+            <div class="form-group">
+                <label>الصوره:</label>
+                <input type="file" name="photo" class="form-control" required />
+
+            </div>
+        <div class="form-group">
+            <label>السعر:</label>
+            <input asp-for="Price" type="number" step="0.01" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-success">إضافة</button>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+
+}
+else
+{
+    <div class="alert alert-danger">
+        الفعالية غير موجودة.
+    </div>
+}
+
+
+
+
+
+
+
+
+

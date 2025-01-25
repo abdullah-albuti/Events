@@ -1,0 +1,166 @@
+﻿@model IEnumerable<Booking>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container py-5">
+    <!-- العنوان وأزرار التحكم -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="fw-bold text-primary">
+            <i class="fas fa-users-cog me-2"></i>
+            إدارة المستخدمين
+        </h2>
+        <a asp-action="Createbooking" class="btn btn-primary btn-lg rounded-pill">
+            <i class="fas fa-user-plus me-2"></i>
+            مستخدم جديد
+        </a>
+    </div>
+
+    <!-- بطاقات المستخدمين -->
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="user-card card h-100 shadow-lg border-0 overflow-hidden">
+                    <!-- رأس البطاقة -->
+                    <div class="card-header bg-primary text-white p-4">
+                        <h4 class="mb-0">
+                            <i class="fas fa-id-badge me-2"></i>
+                            #@item.BookingId
+                        </h4>
+                    </div>
+
+                    <!-- محتوى البطاقة -->
+                    <div class="card-body p-4">
+                        <!-- معلومات المستخدم -->
+                        <div class="user-info mb-4">
+                            <div class="info-item d-flex align-items-center mb-3">
+                                <i class="fas fa-user-circle fa-fw me-2 text-secondary"></i>
+                                <span class="fw-bold">@item.CustomerName</span>
+                            </div>
+                            <div class="info-item d-flex align-items-center mb-3">
+                                <i class="fas fa-phone fa-fw me-2 text-secondary"></i>
+                                <a href="tel:@item.CustomerPhone" class="text-decoration-none">@item.CustomerPhone</a>
+                            </div>
+                            <div class="info-item d-flex align-items-center mb-3">
+                                <i class="fas fa-envelope fa-fw me-2 text-secondary"></i>
+                                <a href="mailto:@item.CustomerEmail" class="text-decoration-none">@item.CustomerEmail</a>
+                            </div>
+                            <div class="info-item d-flex align-items-center">
+                                <i class="fas fa-calendar-day fa-fw me-2 text-secondary"></i>
+                                <span>@item.BookingDate.ToString("yyyy-MM-dd")</span>
+                            </div>
+                        </div>
+
+                        <!-- تفاصيل إضافية -->
+                        <div class="additional-info bg-light p-3 rounded-2 mb-4">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">الفعالية:</span>
+                                <span class="fw-bold">#@item.Event_ID</span>
+                            </div>
+                        </div>
+
+                        <!-- أزرار التحكم -->
+                        <div class="d-flex justify-content-between gap-2">
+                            <a asp-action="Editbooking"
+                               asp-route-id="@item.BookingId"
+                               class="btn btn-warning btn-sm flex-grow-1 rounded-pill">
+                                <i class="fas fa-edit me-2"></i>
+                                تعديل
+                            </a>
+
+                            <button type="button"
+                                    class="btn btn-danger btn-sm flex-grow-1 rounded-pill"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#deleteModal-@item.BookingId">
+                                <i class="fas fa-trash-alt me-2"></i>
+                                حذف
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal التأكيد على الحذف -->
+            <div class="modal fade" id="deleteModal-@item.BookingId" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">تأكيد الحذف</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>هل أنت متأكد من رغبتك في حذف المستخدم "@item.CustomerName"؟</p>
+                        </div>
+                        <div class="modal-footer">
+                            <form asp-action="Delted_booking" method="post">
+                                <input type="hidden" name="BookingId" value="@item.BookingId" />
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                                <button type="submit" class="btn btn-danger">حذف</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e67e22;
+    }
+
+    .user-card {
+        transition: all 0.3s ease;
+        border-radius: 1rem;
+    }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .user-info .info-item {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .additional-info {
+        background: rgba(240, 240, 240, 0.5);
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+        border: none;
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+        border: none;
+        color: white;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #dc3545, #c82333);
+        border: none;
+    }
+
+    @@media (max-width: 768px) {
+        .user-card {
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-lg {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>

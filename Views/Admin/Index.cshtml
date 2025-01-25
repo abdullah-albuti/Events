@@ -1,0 +1,186 @@
+﻿@model IEnumerable<Event>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    var booking = ViewBag.bookings;
+    var packages = ViewBag.packages;
+}
+
+<div class="container py-5">
+ 
+    <div class="row g-4 mb-5">
+      
+        <div class="col-6 col-md-3">
+            <div class="stats-card bg-primary text-white p-4 rounded-3 shadow">
+                <i class="fas fa-calendar-days fa-2x mb-3"></i>
+                <h3 class="mb-0">@Model.Count()</h3>
+                <p class="mb-0">فعالية نشطة</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stats-card bg-success text-white p-4 rounded-3 shadow">
+                <i class="fas fa-box-open fa-2x mb-3"></i>
+                <h3 class="mb-0">@packages.Count</h3>
+                <p class="mb-0">باقة متاحة</p>
+            </div>
+        </div>
+
+
+        <div class="col-6 col-md-3">
+            <div class="stats-card bg-warning text-white p-4 rounded-3 shadow">
+                <i class="fas fa-users fa-2x mb-3"></i>
+                <h3 class="mb-0">@booking.Count</h3>
+                <p class="mb-0">مستخدم مسجل</p>
+            </div>
+        </div>
+
+        <div class="col-6 col-md-3">
+            <div class="stats-card bg-danger text-white p-4 rounded-3 shadow">
+                <i class="fas fa-wallet fa-2x mb-3"></i>
+                <h3 class="mb-0">@Model.Sum(e => e.Price).ToString("N0")</h3>
+                <p class="mb-0">ريال إجمالي الإيرادات</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>
+                        أحدث الفعاليات
+                    </h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>اسم الفعالية</th>
+                                    <th>التاريخ</th>
+                                    <th>الموقع</th>
+                                    <th>الحجوزات</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.OrderByDescending(e => e.Date).Take(5))
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                        <td>@item.Date.ToString("yyyy-MM-dd")</td>
+                                        <td>@item.Location</td>
+                                        <td>
+                                            @if (booking is IEnumerable<Booking> bookings)
+                                            {
+                                                @bookings.Count(b => b.Event_ID == item.EventId)
+                                            }
+                                            else
+                                            {
+                                                <text>0</text>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a asp-action="EditEvent" asp-route-id="@item.EventId"
+                                               class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-pie me-2"></i>
+                        توزيع الفعاليات
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="eventsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-chart-line me-2"></i>
+                        إحصائيات الحجوزات
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="bookingsChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    :root {
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e67e22;
+    }
+
+    .stats-card {
+        transition: transform 0.3s ease;
+    }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(52, 152, 219, 0.1);
+    }
+
+    .card-header {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+ 
+    const eventsCtx = document.getElementById('eventsChart').getContext('2d');
+    new Chart(eventsCtx, {
+        type: 'pie',
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.GroupBy(e => e.Location).Select(g => g.Key))),
+            datasets: [{
+                data: @Html.Raw(Json.Serialize(Model.GroupBy(e => e.Location).Select(g => g.Count()))),
+                backgroundColor: ['#2c3e50', '#3498db', '#e67e22', '#27ae60']
+            }]
+        }
+    });
+
+    const bookingsCtx = document.getElementById('bookingsChart').getContext('2d');
+    new Chart(bookingsCtx, {
+        type: 'line',
+        data: {
+            labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'],
+            datasets: [{
+                label: 'عدد الحجوزات',
+                data: [12, 19, 3, 5, 2, 3],
+                borderColor: '#3498db',
+                tension: 0.4
+            }]
+        }
+    });
+</script>

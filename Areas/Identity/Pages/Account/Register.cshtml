@@ -1,0 +1,171 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "إنشاء حساب جديد";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <!-- الشعار -->
+        <div class="text-center mb-5">
+            <img src="/images/logo.png" height="80" alt="الشعار" class="auth-logo">
+        </div>
+
+        <!-- العنوان الرئيسي -->
+        <h1 class="auth-title">انضم إلينا!</h1>
+
+        <!-- نموذج التسجيل -->
+        <form id="registerForm" method="post" class="auth-form">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <!-- حقل الإيميل -->
+            <div class="form-group icon-input">
+                <i class="fas fa-envelope input-icon"></i>
+                <input asp-for="Input.Email"
+                       class="form-control"
+                       placeholder="البريد الإلكتروني"
+                       autocomplete="username">
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <!-- حقل كلمة المرور -->
+            <div class="form-group icon-input">
+                <i class="fas fa-lock input-icon"></i>
+                <input asp-for="Input.Password"
+                       class="form-control"
+                       placeholder="كلمة المرور"
+                       autocomplete="new-password">
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <!-- تأكيد كلمة المرور -->
+            <div class="form-group icon-input">
+                <i class="fas fa-check-circle input-icon"></i>
+                <input asp-for="Input.ConfirmPassword"
+                       class="form-control"
+                       placeholder="تأكيد كلمة المرور"
+                       autocomplete="new-password">
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <!-- زر التسجيل -->
+            <button type="submit" class="btn auth-btn">
+                إنشاء حساب
+                <i class="fas fa-user-plus ms-2"></i>
+            </button>
+
+            <!-- التسجيل عبر الخدمات الخارجية -->
+            <div class="auth-social-section">
+                <div class="divider">أو سجل باستخدام</div>
+
+                @if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        لم يتم تفعيل التسجيل عبر المنصات الخارجية
+                    </div>
+                }
+                else
+                {
+                    <form id="external-account" method="post" class="social-buttons">
+                        @foreach (var provider in Model.ExternalLogins!)
+                        {
+                            <button type="submit"
+                                    class="social-btn @provider.Name.ToLower()"
+                                    name="provider"
+                                    value="@provider.Name">
+                                <i class="fab fa-@provider.Name.ToLower()"></i>
+                                @provider.DisplayName
+                            </button>
+                        }
+                    </form>
+                }
+            </div>
+        </form>
+    </div>
+</div>
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #27ae60;
+            --google-red: #db4437;
+            --facebook-blue: #1877f2;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+        }
+
+        .auth-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .divider {
+            color: #666;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+            .divider::before,
+            .divider::after {
+                content: "";
+                flex: 1;
+                border-bottom: 1px solid #ddd;
+            }
+
+        .social-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .social-btn {
+            border: none;
+            padding: 0.8rem;
+            border-radius: 0.5rem;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+            .social-btn.google {
+                background: var(--google-red);
+            }
+
+            .social-btn.facebook {
+                background: var(--facebook-blue);
+            }
+
+            .social-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            }
+    </style>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

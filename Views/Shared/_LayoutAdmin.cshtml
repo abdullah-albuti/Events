@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم الإدارية</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+</head>
+<body>
+
+    <!-- الشريط الجانبي -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h3 class="mb-0">
+                <i class="fas fa-cogs me-2"></i>
+                لوحة التحكم
+            </h3>
+        </div>
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a class="nav-link active" asp-action="Index">
+                    <i class="fas fa-home"></i>
+                    الرئيسية
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Packageadminpage">
+                    <i class="fas fa-box-open"></i>
+                    إدارة الباقات
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Eventadminpage">
+                    <i class="fas fa-calendar-days"></i>
+                    إدارة الفعاليات
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-action="Bookingadminpage">
+                    <i class="fas fa-users-gear"></i>
+                    إدارة المستخدمين
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- الرأس -->
+    <header class="header">
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <h2 class="header-title">مرحبا، المدير!</h2>
+
+        <li class="dropdown user-profile">
+            <!-- زر الملف الشخصي -->
+            <div class="dropdown-toggle profile-toggle"
+                 data-bs-toggle="dropdown"
+                 aria-expanded="false">
+                <img src="assets/images/user.jpg"
+                     alt="الملف الشخصي"
+                     class="profile-img">
+            </div>
+
+            <!-- القائمة المنسدلة -->
+            <ul class="dropdown-menu dropdown-menu-end profile-menu shadow-lg" dir="rtl">
+                <li class="dropdown-header text-center p-3">
+                    <h6 class="mb-1 fw-bold">محمد أحمد</h6>
+                    <small class="text-muted">مدير النظام</small>
+                </li>
+                <li><hr class="dropdown-divider mx-3"></li>
+                <li class="dropdown-item">
+                    <a href="#" class="d-flex align-items-center gap-3 px-3 py-2">
+                        <i class="material-icons fs-5">person</i>
+                        <span>إعدادات الملف الشخصي</span>
+                    </a>
+                </li>
+                <li class="dropdown-item">
+                    <a href="#" class="d-flex align-items-center gap-3 px-3 py-2">
+                        <i class="material-icons fs-5">feedback</i>
+                        <span>إرسال ملاحظات</span>
+                    </a>
+                </li>
+                <li class="dropdown-item">
+                    <a href="#" class="d-flex align-items-center gap-3 px-3 py-2">
+                        <i class="material-icons fs-5">help</i>
+                        <span>مركز المساعدة</span>
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider mx-3"></li>
+                <li class="dropdown-item">
+                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
+                        <button type="submit" class="nav-link btn btn-link text-dark">تسجيل الخروج</button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-content">
+        @RenderBody()
+    </main>
+
+    <!-- التذييل -->
+    <footer class="footer">
+        <p class="mb-0">
+            © 2023 جميع الحقوق محفوظة
+            <span class="text-accent">رحلتي</span>
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // تفعيل القائمة المتحركة
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
