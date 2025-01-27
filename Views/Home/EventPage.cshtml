@@ -89,57 +89,48 @@
 </div>
 
 <style>
-    :root {
-        --primary-color: #2c3e50;
-        --secondary-color: #3498db;
-        --accent-color: #e67e22;
+
+
+
+    .card-image {
+        height: var(--image-height);
+        overflow: hidden;
+        border-radius: 1rem 1rem 0 0;
     }
 
-    /* بطاقات الفعاليات */
-    .event-card {
-        transition: all 0.3s ease;
-        border-radius: 1rem;
-    }
-
-        .event-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-    /* تصميم الصورة */
-    .card-image {
-        height: 250px;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-    }
-
-    .event-card:hover .card-image {
-        transform: scale(1.05);
+    .event-card:hover .card-image img {
+        transform: scale(1.08);
     }
 
     .image-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%);
+        background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 100%);
     }
 
-    /* تاريخ الفعالية */
-    .event-date {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        font-size: 1.1rem;
-        padding: 0.5rem 1rem;
-        border-radius: 30px;
+    @@media (max-width: 992px) {
+        .card-image {
+            height: var(--mobile-image-height);
+        }
     }
 
-    /* تفاصيل الفعالية */
-    .event-details {
-        border-top: 2px solid #f0f0f0;
-        padding-top: 1rem;
+    @@media (max-width: 576px) {
+        :root {
+            --mobile-image-height: 150px;
+        }
+    }
+    :root {
+        --image-height: 250px;
+        --mobile-image-height: 180px;
+       
+
+        --primary-color: #2c3e50;
+        --secondary-color: #3498db;
+        --accent-color: #e67e22;
     }
 
     /* زر الحجز */
@@ -170,17 +161,7 @@
             padding: 0.75rem 1.5rem;
         }
 
-    /* التجاوب مع الشاشات الصغيرة */
-    @@media (max-width: 768px) {
-        .card-image {
-            height: 200px;
-        }
-
-        .event-date {
-            font-size: 0.9rem;
-            bottom: 10px;
-            left: 10px;
-        }
+ 
 
         .search-box {
             width: 100%;

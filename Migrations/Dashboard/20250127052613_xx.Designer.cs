@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Events.Migrations.Dashboard
 {
     [DbContext(typeof(DashboardContext))]
-    [Migration("20250125003325_admindashboard")]
-    partial class Admindashboard
+    [Migration("20250127052613_xx")]
+    partial class xx
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

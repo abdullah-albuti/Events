@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Events.Migrations.Dashboard
 {
     /// <inheritdoc />
-    public partial class admindashboard : Migration
+    public partial class Admindashboard : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
